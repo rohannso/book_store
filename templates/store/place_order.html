@@ -1,0 +1,14 @@
+{% extends "store/base.html" %}
+
+{% block title %}Place Order{% endblock %}
+
+{% block body %}
+  <div class="container">
+    <h1>Place Order</h1>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-primary">Add to Order</button>
+    </form>
+  </div>
+{% endblock %}

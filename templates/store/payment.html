@@ -1,0 +1,77 @@
+{% extends "store/base.html" %}
+{% block body %}
+
+<div class="payment-container">
+    <h2>Complete Your Payment</h2>
+    <p>Total Amount: ₹{{ total_amount }}</p>
+    <button id="razorpay-button" class="pay-button">Pay Now</button>
+</div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    var options = {
+        "key": "{{ razorpay_key_id }}", // Enter the Key ID generated from the Dashboard
+        "amount": "{{ total_amount|floatformat:2 }}", // Amount is in paise, convert it to display
+        "currency": "INR",
+        "name": "Your Store Name",
+        "description": "Order #{{ order.id }}",
+        "order_id": "{{ razorpay_order_id }}", // Razorpay order ID passed from the backend
+        "handler": function (response) {
+            // Handle successful payment here
+            fetch("{% url 'verify_payment' %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: JSON.stringify({
+                    "razorpay_payment_id": response.razorpay_payment_id,
+                    "razorpay_order_id": response.razorpay_order_id,
+                    "razorpay_signature": response.razorpay_signature,
+                    "order_id": "{{ order.id }}"
+                })
+            }).then(function (response) {
+                if (response.ok) {
+                    window.location.href = "{% url 'payment_success' %}";
+                } else {
+                    window.location.href = "{% url 'payment_failed' %}";
+                }
+            });
+        },
+        "theme": {
+            "color": "#3399cc"
+        }
+    };
+
+    var rzp1 = new Razorpay(options);
+    document.getElementById('razorpay-button').onclick = function (e) {
+        rzp1.open();
+        e.preventDefault();
+    }
+</script>
+
+<style>
+    .payment-container {
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    .pay-button {
+        background-color: #007bff;
+        color: white;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .pay-button:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+{% endblock %}

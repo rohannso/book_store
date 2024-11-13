@@ -1,0 +1,127 @@
+<!-- store/staff_dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+        h1 {
+            margin: 0;
+        }
+        p {
+            font-size: 18px;
+        }
+        .container {
+            width: 80%;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .section h2 {
+            color: #2c3e50;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        ul li {
+            background-color: #ecf0f1;
+            margin: 5px 0;
+            padding: 12px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        ul li a {
+            text-decoration: none;
+            color: #2c3e50;
+            font-size: 18px;
+        }
+        ul li:hover {
+            background-color: #bdc3c7;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-between;
+        }
+        .stats div {
+            background-color: #3498db;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            width: 48%;
+        }
+        .stats div h3 {
+            margin: 0;
+            font-size: 22px;
+        }
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Staff Dashboard</h1>
+</header>
+
+<div class="container">
+    <p>Welcome, {{ request.user.username }}! This is the staff dashboard.</p>
+
+    <div class="section">
+        <h2>Admin Functions</h2>
+        <ul>
+            <li><a href="{% url 'book-list' %}">Manage Books</a></li>
+            <li><a href="{% url 'add_book' %}">Add Books</a></li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Statistics</h2>
+        <div class="stats">
+            <div>
+                <h3>Total Books</h3>
+                <p>{{ total_books }}</p>
+            </div>
+            <div>
+                <h3>Total Users</h3>
+                <p>{{ total_users }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2024 Your Company</p>
+</footer>
+
+</body>
+</html>

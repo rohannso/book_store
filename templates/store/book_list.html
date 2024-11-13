@@ -1,0 +1,259 @@
+{% extends 'store/base.html' %}
+{% block body %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Store</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .book-card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .book-image {
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+        }
+
+        .book-image img {
+            max-height: 100%;
+            max-width: 100%;
+            object-fit: cover;
+        }
+
+        .book-info {
+            padding: 15px;
+        }
+
+        .book-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .book-title:hover {
+            text-decoration: underline;
+        }
+
+        .book-author, .book-genre, .book-price {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .book-description {
+            font-size: 12px;
+            color: #444;
+            margin-top: 10px;
+        }
+
+        .stock-status {
+            margin-top: 10px;
+            font-size: 13px;
+        }
+
+        .in-stock {
+            color: green;
+        }
+
+        .low-stock {
+            color: #ff9800;
+        }
+
+        .out-of-stock {
+            color: red;
+        }
+
+        .add-to-cart-button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 15px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .add-to-cart-button:hover {
+            background-color: #0056b3;
+        }
+
+        .add-to-cart-button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .pagination a {
+            padding: 10px 15px;
+            margin: 0 5px;
+            border: 1px solid #007bff;
+            color: #007bff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .pagination a:hover {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .pagination .active {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .share-buttons {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .share-button {
+            font-size: 14px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: white;
+            transition: background-color 0.3s;
+        }
+
+        .whatsapp {
+            background-color: #25D366;
+        }
+
+        .linkedin {
+            background-color: #0077b5;
+        }
+
+        .instagram {
+            background-color: #e1306c;
+        }
+    </style>
+</head>
+<body>
+    <div class="books-grid">
+        {% if books %}
+            {% for book in books %}
+            <div class="book-card">
+                <div class="book-image">
+                    <img src="{{ book.image.url }}" alt="{{ book.title }}">
+                </div>
+                <div class="book-info">
+                    <a href="{% url 'book-detail' book.pk %}" class="book-title">{{ book.title }}</a>
+                    <div class="book-author">By {{ book.author }}</div>
+                    <div class="book-genre">{{ book.genre }}</div>
+                    <div class="book-description">{{ book.description|truncatechars:100 }}</div>
+                    <div class="book-price">${{ book.price }}</div>
+                    {% if book.stock > 10 %}
+                        <div class="stock-status in-stock">
+                            <i class="fas fa-check-circle"></i> In Stock
+                        </div>
+                    {% elif book.stock > 0 %}
+                        <div class="stock-status low-stock">
+                            <i class="fas fa-exclamation-circle"></i> Only {{ book.stock }} left
+                        </div>
+                    {% else %}
+                        <div class="stock-status out-of-stock">
+                            <i class="fas fa-times-circle"></i> Out of Stock
+                        </div>
+                    {% endif %}
+                    <form action="{% url 'add_to_cart' book.pk %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="add-to-cart-button" {% if book.stock == 0 %}disabled{% endif %}>
+                            Add to Cart
+                        </button>
+                    </form>
+                    <form action="{% url 'add_to_watchlist' book.pk %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="add-to-cart-button">
+                            Add to Watchlist
+                        </button>
+                    </form>
+                    {% if user.is_authenticated and user.is_staff %}
+                        <!-- Admin Actions -->
+                        <div style="margin-top: 10px;">
+                            <form action="{% url 'book-update' book.pk %}" method="get" style="display: inline;">
+                                <button type="submit" class="add-to-cart-button" style="background-color: #28a745;">Update</button>
+                            </form>
+                            <form action="{% url 'book-delete' book.pk %}" method="post" style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="add-to-cart-button" style="background-color: #dc3545;">Delete</button>
+                            </form>
+                        </div>
+                    {% endif %}
+                    <div class="share-buttons">
+                        <a href="https://wa.me/?text={{ book.title }} - Check out this book on Book Voyage: {{ request.build_absolute_uri }}" target="_blank" class="share-button whatsapp">
+                            <i class="fab fa-whatsapp"></i> WhatsApp
+                        </a>
+                        <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ request.build_absolute_uri }}" target="_blank" class="share-button linkedin">
+                            <i class="fab fa-linkedin"></i> LinkedIn
+                        </a>
+                        <a href="https://www.instagram.com/?url={{ request.build_absolute_uri }}" target="_blank" class="share-button instagram">
+                            <i class="fab fa-instagram"></i> Instagram
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div style="text-align: center; padding: 50px;">
+                <i class="fas fa-book" style="font-size: 48px; color: #666;"></i>
+                <h2>No books available</h2>
+                <p>Check back later for new additions!</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="pagination">
+        {% if books.has_previous %}
+            <a href="?page=1">&laquo; First</a>
+            <a href="?page={{ books.previous_page_number }}">Previous</a>
+        {% endif %}
+        <span>Page {{ books.number }} of {{ books.paginator.num_pages }}</span>
+        {% if books.has_next %}
+            <a href="?page={{ books.next_page_number }}">Next</a>
+            <a href="?page={{ books.paginator.num_pages }}">Last &raquo;</a>
+        {% endif %}
+    </div>
+</body>
+</html>
+{% endblock %}

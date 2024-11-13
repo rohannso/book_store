@@ -1,0 +1,296 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Book Voyage{% endblock %}</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      /* Primary Colors */
+      --primary-dark: #2C3E50;    /* Deep blue-gray for main elements */
+      --primary-light: #ECF0F1;   /* Light gray-white for backgrounds */
+      --accent-gold: #F1C40F;     /* Warm gold for highlights/CTAs */
+      --accent-teal: #16A085;     /* Teal for secondary actions */
+      --neutral-dark: #34495E;    /* Dark blue-gray for text */
+      --neutral-medium: #7F8C8D;  /* Medium gray for secondary text */
+      --neutral-light: #BDC3C7;   /* Light gray for borders */
+      --bg-primary: #FFFFFF;      /* White for main background */
+      --bg-secondary: #F8F9FA;    /* Light gray for secondary background */
+      --bg-tertiary: #E9ECEF;     /* Slightly darker gray for hover states */
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Raleway', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--neutral-dark);
+    }
+
+    .container {
+      background-color: transparent;
+      box-shadow: none;
+    }
+
+    /* Header styles */
+    header {
+      background-color: var(--primary-dark);
+      padding: 15px 0;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header a {
+      text-decoration: none;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: var(--primary-light);
+      transition: color 0.3s ease;
+    }
+
+    .logo:hover {
+      color: var(--accent-gold);
+    }
+
+    nav {
+      position: relative;
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    nav li {
+      margin-right: 20px;
+      position: relative;
+    }
+
+    nav a {
+      color: var(--primary-light);
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover {
+      color: var(--accent-gold);
+    }
+
+    /* Dropdown styles */
+    .dropdown {
+      display: none;
+      position: absolute;
+      background-color: var(--bg-primary);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      z-index: 1;
+      padding: 10px 0;
+      min-width: 150px;
+      border-radius: 4px;
+    }
+
+    nav li:hover .dropdown {
+      display: block;
+    }
+
+    .dropdown li {
+      margin: 0;
+    }
+
+    .dropdown a {
+      padding: 10px 15px;
+      display: block;
+      color: var(--neutral-dark);
+    }
+
+    .dropdown a:hover {
+      background-color: var(--bg-tertiary);
+      color: var(--accent-teal);
+    }
+
+    /* Search form styles */
+    .search-form {
+      display: inline-block;
+      margin-left: 20px;
+    }
+
+    .search-form input {
+      padding: 8px 12px;
+      border: 1px solid var(--neutral-light);
+      border-radius: 4px;
+      background-color: var(--primary-light);
+      color: var(--neutral-dark);
+      transition: all 0.3s ease;
+    }
+
+    .search-form input:focus {
+      outline: none;
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 0 2px rgba(241, 196, 15, 0.2);
+    }
+
+    .search-form button {
+      padding: 8px 16px;
+      background-color: var(--accent-teal);
+      color: var(--primary-light);
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .search-form button:hover {
+      background-color: #128270;
+    }
+
+    /* Authentication Links */
+    .auth-links {
+      display: flex;
+      align-items: center;
+    }
+
+    .auth-links li {
+      margin-right: 20px;
+    }
+
+    .auth-links a {
+      color: var(--primary-light);
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+
+    .auth-links a:hover {
+      color: var(--accent-gold);
+    }
+    
+
+    /* Footer styles */
+    footer {
+      background-color: var(--primary-dark);
+      padding: 30px 0;
+      margin-top: 40px;
+      color: var(--primary-light);
+    }
+
+    footer .container {
+      background-color: transparent;
+      box-shadow: none;
+    }
+
+    footer p {
+      color: var(--primary-light);
+      margin-bottom: 15px;
+    }
+
+    .social-links {
+      list-style: none;
+      padding: 0;
+      margin: 15px 0;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .social-links li {
+      margin: 0;
+    }
+
+    .social-links a {
+      color: var(--primary-light);
+      font-size: 20px;
+      transition: all 0.3s ease;
+      display: inline-block;
+      padding: 8px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .social-links a:hover {
+      color: var(--accent-gold);
+      background-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <a href="/" class="logo">Book Voyage</a>
+      <nav>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li>
+            <a href="#">Books</a>
+            <ul class="dropdown">
+              <li><a href="/books/fiction">Fiction</a></li>
+              <li><a href="/books/non-fiction">Non-Fiction</a></li>
+              <li><a href="/books/science">Science</a></li>
+              <li><a href="/books/romance">Romance</a></li>
+              <li><a href="/books/new-releases">New Releases</a></li>
+            </ul>
+          </li>
+          <li><a href="/about">About Us</a></li>
+          <li><a href="/contact">Contact</a></li>
+          <li><a href="/cart">Cart</a></li>
+
+          <!-- Authentication Links -->
+          <li class="auth-links">
+            {% if not user.is_authenticated %}
+              <li><a href="{% url 'login' %}">User Login</a></li>
+              <li><a href="{% url 'staff-login' %}">Staff Login</a></li>
+              <li><a href="{% url 'register' %}">Register</a></li>
+            {% else %}
+              {% if user.is_staff or user.is_superuser %}
+                <li><a href="{% url 'staff_dashboard' %}">Staff Dashboard</a></li>
+              {% endif %}
+              <li><a href="{% url 'profile' %}">Profile</a></li>
+              <li><a href="{% url 'logout' %}">Logout</a></li>
+            {% endif %}
+          </li>
+
+          <li class="search-form">
+            <form action="{% url 'book-search' %}" method="get">
+              <input type="text" name="search" placeholder="Search books..." required>
+              <button type="submit">Search</button>
+            </form>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    {% block body %}
+    {% endblock %}
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2024 Book Voyage. All rights reserved.</p>
+      <ul class="social-links">
+        <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+        <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+        <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+        <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+      </ul>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,60 @@
+{% extends 'store/base.html' %}
+
+{% block title %}My Orders - Book Voyage{% endblock %}
+
+{% block body %}
+<div class="container orders-container">
+    <h2>My Orders</h2>
+    {% if orders.exists %}
+        <table class="orders-table">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Date</th>
+                    <th>Total Amount</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td>{{ order.id }}</td>
+                        <td>{{ order.order_date }}</td>
+                        <td>${{ order.total_amount }}</td>
+                        <td>{{ order.status }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>You have no orders.</p>
+    {% endif %}
+</div>
+
+<style>
+    .orders-container {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .orders-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .orders-table th, .orders-table td {
+        padding: 15px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .orders-table th {
+        background-color: #007bff;
+        color: white;
+    }
+</style>
+{% endblock %}

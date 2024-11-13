@@ -1,0 +1,225 @@
+{% extends 'store/base.html' %}
+
+{% block title %}Profile - Book Voyage{% endblock %}
+
+{% block body %}
+<div class="profile-container">
+    <!-- Sidebar for account actions -->
+    <div class="profile-sidebar">
+        <div class="profile-avatar">
+            <img src="{{ user.profile.avatar.url }}" alt="Profile Picture" class="avatar-img">
+        </div>
+        <h3>{{ user.username }}</h3>
+        <ul class="account-actions">
+            <li><a href="{% url 'edit_profile' %}" class="action-link">Edit Profile</a></li>
+            <li><a href="{% url 'my_orders' %}" class="action-link">My Orders</a></li>
+            <li><a href="{% url 'watchlist' %}" class="action-link">Watchlist</a></li>
+            <li><a href="{% url 'password_reset' %}" class="action-link">Change Password</a></li>
+            <li><a href="{% url 'logout' %}" class="action-link">Logout</a></li>
+            <li>
+                <form action="#" method="post" class="delete-account-form" onsubmit="return confirm('Are you sure you want to delete your account? This action cannot be undone.');">
+                    {% csrf_token %}
+                    <button type="submit" class="delete-account-button">Delete Account</button>
+                </form>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Profile content -->
+    <div class="profile-content">
+        <div class="profile-header">
+            <h2>Welcome, {{ user.username }}!</h2>
+            <p class="profile-subtitle">Manage your account and preferences.</p>
+        </div>
+
+        <div class="profile-info-card">
+            <h3>Profile Information</h3>
+            <ul class="profile-info-list">
+                <li><strong>Email:</strong> {{ user.email }}</li>
+                <li><strong>First Name:</strong> {{ user.first_name }}</li>
+                <li><strong>Last Name:</strong> {{ user.last_name }}</li>
+                <li><strong>Date Joined:</strong> {{ user.date_joined }}</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Main container */
+    .profile-container {
+        display: flex;
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        color: #333;
+    }
+
+    /* Sidebar */
+    .profile-sidebar {
+        flex: 1;
+        background-color: #f9f9f9;
+        padding: 1.5rem;
+        border-radius: 8px;
+        margin-right: 2rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    .profile-avatar {
+        margin-bottom: 1rem;
+    }
+
+    .avatar-img {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid #007bff;
+    }
+
+    .profile-sidebar h3 {
+        font-size: 1.5rem;
+        color: #333;
+        margin-bottom: 1rem;
+    }
+
+    .account-actions {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .account-actions li {
+        margin-bottom: 1rem;
+    }
+
+    .action-link {
+        font-size: 1.2rem;
+        color: #007bff;
+        font-weight: bold;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    .action-link:hover {
+        color: #0056b3;
+    }
+
+    .delete-account-button {
+        padding: 10px 20px;
+        font-size: 1.1rem;
+        color: white;
+        background-color: #ff4d4d;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .delete-account-button:hover {
+        background-color: #ff1a1a;
+    }
+
+    /* Profile content */
+    .profile-content {
+        flex: 3;
+    }
+
+    .profile-header {
+        text-align: left;
+        margin-bottom: 2rem;
+    }
+
+    .profile-header h2 {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+    }
+
+    .profile-subtitle {
+        font-size: 1.2rem;
+        color: #666;
+    }
+
+    .profile-info-card {
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+    }
+
+    .profile-info-card h3 {
+        font-size: 1.6rem;
+        margin-bottom: 1rem;
+        color: #333;
+    }
+
+    .profile-info-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .profile-info-list li {
+        font-size: 1.1rem;
+        padding: 8px 0;
+        border-bottom: 1px solid #eee;
+        color: #555;
+    }
+
+    .profile-info-list li strong {
+        color: #007bff;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .profile-container {
+            flex-direction: column;
+            padding: 1.5rem;
+        }
+
+        .profile-sidebar {
+            margin-right: 0;
+            margin-bottom: 2rem;
+        }
+
+        .profile-header h2 {
+            font-size: 2rem;
+        }
+
+        .profile-subtitle {
+            font-size: 1rem;
+        }
+
+        .profile-info-card h3,
+        .account-actions h3 {
+            font-size: 1.4rem;
+        }
+
+        .profile-info-list li {
+            font-size: 1rem;
+        }
+
+        .delete-account-button {
+            font-size: 1rem;
+            padding: 8px 15px;
+        }
+
+        .action-link {
+            font-size: 1rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .profile-header h2 {
+            font-size: 1.8rem;
+        }
+
+        .profile-info-list li {
+            font-size: 0.9rem;
+        }
+    }
+</style>
+{% endblock %}
